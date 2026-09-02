@@ -1,0 +1,74 @@
+import uuid
+
+from sqlalchemy import func, select
+from sqlalchemy.orm import Session
+
+from app.models.satisfaction_survey import SatisfactionSurvey
+
+
+def create(
+    db: Session,
+    *,
+    user_id: uuid.UUID,
+    satisfaction_rating: int,
+    ease_of_use_rating: int,
+    accuracy_rating: int,
+    would_recommend: bool,
+    comments: str | None,
+) -> SatisfactionSurvey:
+    survey = SatisfactionSurvey(
+        user_id=user_id,
+        satisfaction_rating=satisfaction_rating,
+        ease_of_use_rating=ease_of_use_rating,
+        accuracy_rating=accuracy_rating,
+        would_recommend=would_recommend,
+        comments=comments,
+    )
+    db.add(survey)
+    db.commit()
+    db.refresh(survey)
+    return survey
+
+
+def list_all(db: Session, *, page: int, page_size: int) -> tuple[list[SatisfactionSurvey], int]:
+    base = select(SatisfactionSurvey)
+    total = db.execute(select(func.count()).select_from(base.subquery())).scalar_one()
+    stmt = (
+        base.order_by(SatisfactionSurvey.created_at.desc())
+        .offset((page - 1) * page_size)
+        .limit(page_size)
+    )
+    items = list(db.execute(stmt).scalars().all())
+    return items, total
+
+
+def get_summary(db: Session) -> dict:
+    total = db.execute(select(func.count()).select_from(SatisfactionSurvey)).scalar_one()
+    if total == 0:
+        return {
+            "total_responses": 0,
+            "avg_satisfaction_rating": None,
+            "avg_ease_of_use_rating": None,
+            "avg_accuracy_rating": None,
+            "would_recommend_rate": None,
+        }
+
+    avg_satisfaction, avg_ease, avg_accuracy = db.execute(
+        select(
+            func.avg(SatisfactionSurvey.satisfaction_rating),
+            func.avg(SatisfactionSurvey.ease_of_use_rating),
+            func.avg(SatisfactionSurvey.accuracy_rating),
+        )
+    ).one()
+
+    recommend_count = db.execute(
+        select(func.count()).select_from(SatisfactionSurvey).where(SatisfactionSurvey.would_recommend.is_(True))
+    ).scalar_one()
+
+    return {
+        "total_responses": total,
+        "avg_satisfaction_rating": float(avg_satisfaction) if avg_satisfaction is not None else None,
+        "avg_ease_of_use_rating": float(avg_ease) if avg_ease is not None else None,
+        "avg_accuracy_rating": float(avg_accuracy) if avg_accuracy is not None else None,
+        "would_recommend_rate": recommend_count / total,
+    }

@@ -1,0 +1,11 @@
+# Windows lost native GPU support in tensorflow>=2.11 (WSL2 required for
+# GPU there); on Linux/Colab you may swap this for the `tensorflow` package
+# to get GPU support instead.
+tensorflow-cpu>=2.19,<2.22
+pillow>=11.0
+opencv-python-headless>=4.10
+numpy>=2.0,<3.0
+
+# Only used by notebooks/training.ipynb's plotting cells (Colab has this
+# preinstalled already; needed here only to run that notebook locally).
+matplotlib>=3.9

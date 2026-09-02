@@ -1,0 +1,7 @@
+              precision    recall  f1-score   roc_auc  correct/total
+
+Brown_Spot        1.000     0.944     0.971       n/a          67/71
+Healthy           0.984     0.994     0.989       n/a        180/181
+White_Scale       0.982     0.994     0.988       n/a        164/165
+
+accuracy                              0.986

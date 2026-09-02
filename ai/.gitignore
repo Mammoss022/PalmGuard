@@ -1,0 +1,14 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Real dataset photos don't belong in git (too large / private).
+data/raw/*/*.jpg
+data/raw/*/*.jpeg
+data/raw/*/*.png
+data/raw/*/*.webp
+data/splits/
+
+# Trained model files DO belong in git — the deployed Backend loads
+# MOBILENET_MODEL_PATH straight from this repo (see docs/AI_MODEL.md#model-deployment).

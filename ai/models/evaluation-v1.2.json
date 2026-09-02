@@ -1,0 +1,48 @@
+{
+  "accuracy": 0.9856115107913669,
+  "confusion_matrix": [
+    [
+      67,
+      2,
+      2
+    ],
+    [
+      0,
+      180,
+      1
+    ],
+    [
+      0,
+      1,
+      164
+    ]
+  ],
+  "class_names": [
+    "Brown_Spot",
+    "Healthy",
+    "White_Scale"
+  ],
+  "per_class": {
+    "Brown_Spot": {
+      "precision": 1.0,
+      "recall": 0.9436619718309859,
+      "f1": 0.9710144927536231,
+      "correct": 67,
+      "total": 71
+    },
+    "Healthy": {
+      "precision": 0.9836065573770492,
+      "recall": 0.994475138121547,
+      "f1": 0.989010989010989,
+      "correct": 180,
+      "total": 181
+    },
+    "White_Scale": {
+      "precision": 0.9820359281437125,
+      "recall": 0.9939393939393939,
+      "f1": 0.9879518072289156,
+      "correct": 164,
+      "total": 165
+    }
+  }
+}
