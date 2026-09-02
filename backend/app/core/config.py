@@ -1,4 +1,3 @@
-from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -34,7 +33,13 @@ class Settings(BaseSettings):
     SUPABASE_SERVICE_ROLE_KEY: str = ""
     SUPABASE_STORAGE_BUCKET: str = "diagnosis-images"
 
-    CORS_ORIGINS: list[str] = ["http://localhost:3000"]
+    # Plain str, not list[str] — pydantic-settings tries to JSON-decode env
+    # vars for list-typed fields *before* any field_validator runs, so a
+    # comma-separated value (no brackets) blows up with a SettingsError
+    # before our own parsing ever gets a chance to run. Comma-separated is
+    # how you'd naturally type this into Render's Environment Variables UI,
+    # so parse it ourselves instead — see cors_origins_list below.
+    CORS_ORIGINS: str = "http://localhost:3000"
 
     # Google Gemini Vision (see app/services/ai_inference.py) — ported from
     # ~/BaiScan's googleAiService.ts. Used for full classification when
@@ -57,12 +62,17 @@ class Settings(BaseSettings):
     AI_BACKEND: str = "mobilenet"
     MOBILENET_MODEL_PATH: str = "../ai/models/mobilenetv2-v1.2.keras"
 
-    @field_validator("CORS_ORIGINS", mode="before")
-    @classmethod
-    def _split_cors_origins(cls, value: object) -> object:
-        if isinstance(value, str) and not value.strip().startswith("["):
-            return [origin.strip() for origin in value.split(",") if origin.strip()]
-        return value
+    @property
+    def cors_origins_list(self) -> list[str]:
+        """Accepts either a comma-separated string (e.g. Render's Environment
+        Variables UI: `http://localhost:3000,https://foo.vercel.app`) or a
+        JSON array string (the old `.env` convention, still supported)."""
+        raw = self.CORS_ORIGINS.strip()
+        if raw.startswith("["):
+            import json
+
+            return [str(origin) for origin in json.loads(raw)]
+        return [origin.strip() for origin in raw.split(",") if origin.strip()]
 
     @property
     def max_upload_size_bytes(self) -> int:

@@ -17,14 +17,18 @@ app = FastAPI(title=settings.PROJECT_NAME)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
+    allow_origins=settings.cors_origins_list,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Dev-only stand-in for Object Storage — see app/services/storage.py.
-app.mount("/media", StaticFiles(directory=settings.STORAGE_DIR), name="media")
+# Dev-only stand-in for Object Storage — see app/services/storage.py. Only
+# mounted for STORAGE_BACKEND=local: STORAGE_DIR is never created (and would
+# be empty/ephemeral anyway) when STORAGE_BACKEND=supabase, and StaticFiles
+# raises at startup if the directory doesn't exist.
+if settings.STORAGE_BACKEND == "local":
+    app.mount("/media", StaticFiles(directory=settings.STORAGE_DIR), name="media")
 
 app.include_router(api_router, prefix=settings.API_V1_PREFIX)
 
