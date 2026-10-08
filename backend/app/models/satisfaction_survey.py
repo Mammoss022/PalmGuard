@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, SmallInteger, Text, Uuid, func
+from sqlalchemy import Boolean, DateTime, ForeignKey, Index, SmallInteger, Text, Uuid, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base_class import Base
@@ -15,11 +15,11 @@ class SatisfactionSurvey(Base):
     """UAT satisfaction survey submitted by a farmer after trying the system.
 
     Matches docs/PROJECT.md's Methodology step 4 (User Acceptance Testing) —
-    one submission per user visit to the survey form, not tied to a specific
-    Diagnosis, since it asks about the system overall.
+    One immutable submission per user, not tied to a specific Diagnosis.
     """
 
     __tablename__ = "satisfaction_surveys"
+    __table_args__ = (Index("uq_satisfaction_surveys_user_id", "user_id", unique=True),)
 
     id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id: Mapped[uuid.UUID] = mapped_column(

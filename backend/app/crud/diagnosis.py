@@ -1,10 +1,11 @@
 import uuid
 
-from sqlalchemy import func, select
+from sqlalchemy import String, cast, func, or_, select
 from sqlalchemy.orm import Session, joinedload
 
 from app.models.diagnosis import STATUS_COMPLETED, STATUS_FAILED, Diagnosis
 from app.models.disease_class import DiseaseClass
+from app.models.user import User
 
 
 def create(db: Session, *, user_id: uuid.UUID, image_url: str, thumbnail_url: str | None = None) -> Diagnosis:
@@ -34,13 +35,15 @@ def mark_completed(
     diagnosis.model_version = model_version
     diagnosis.class_probabilities = class_probabilities
     diagnosis.status = STATUS_COMPLETED
+    diagnosis.failure_reason = None
     db.commit()
     db.refresh(diagnosis)
     return diagnosis
 
 
-def mark_failed(db: Session, diagnosis: Diagnosis) -> Diagnosis:
+def mark_failed(db: Session, diagnosis: Diagnosis, *, reason: str | None = None) -> Diagnosis:
     diagnosis.status = STATUS_FAILED
+    diagnosis.failure_reason = reason
     db.commit()
     db.refresh(diagnosis)
     return diagnosis
@@ -81,8 +84,19 @@ def list_all(
     class_code: str | None = None,
     status: str | None = None,
     user_id: uuid.UUID | str | None = None,
+    q: str | None = None,
 ) -> tuple[list[Diagnosis], int]:
     base = select(Diagnosis)
+    if q and q.strip():
+        term = q.strip()
+        matches = [
+            User.full_name.icontains(term, autoescape=True),
+            User.email.icontains(term, autoescape=True),
+        ]
+        identifier = term.replace("-", "")
+        if identifier:
+            matches.append(func.replace(cast(Diagnosis.id, String), "-", "").icontains(identifier, autoescape=True))
+        base = base.join(Diagnosis.user).where(or_(*matches))
     if class_code is not None:
         base = base.join(Diagnosis.disease_class).where(DiseaseClass.code == class_code.upper())
     if status is not None:
@@ -97,7 +111,7 @@ def list_all(
 
     total = db.execute(select(func.count()).select_from(base.subquery())).scalar_one()
     stmt = (
-        base.options(joinedload(Diagnosis.disease_class))
+        base.options(joinedload(Diagnosis.disease_class), joinedload(Diagnosis.user))
         .order_by(Diagnosis.created_at.desc())
         .offset((page - 1) * page_size)
         .limit(page_size)

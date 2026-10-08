@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import styles from "@/components/admin/admin.module.css";
 import { useAuth } from "@/lib/auth-context";
 import { listUsers } from "@/lib/admin";
 import { formatThaiDateTime } from "@/lib/disease-ui";
@@ -46,11 +47,7 @@ export default function AdminUsersPage() {
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6">
-      <div>
-        <span className="text-xs font-bold tracking-wide text-primary">ผู้ดูแลระบบ</span>
-        <h1 className="text-2xl font-bold">บัญชีผู้ใช้ทั้งหมด</h1>
-        <p className="text-muted-foreground">ทั้งหมด {users.length} บัญชี — ดูได้ว่าแต่ละคนวินิจฉัยอะไรไปบ้าง</p>
-      </div>
+      <div className={styles.listMeta}><span>แสดง <strong>{users.length}</strong> บัญชี</span><span>เลือกผู้ใช้เพื่อดูข้อมูลและประวัติการวิเคราะห์</span></div>
 
       <Card>
         <CardHeader>
@@ -70,6 +67,7 @@ export default function AdminUsersPage() {
                   <th className="py-2 pr-4 font-medium">อีเมล</th>
                   <th className="py-2 pr-4 font-medium">สิทธิ์</th>
                   <th className="py-2 pr-4 font-medium">สมัครเมื่อ</th>
+                  <th className="py-2 pr-4 font-medium">แบบประเมิน</th>
                   <th className="py-2 pr-0 text-right font-medium">จัดการ</th>
                 </tr>
               </thead>
@@ -105,6 +103,7 @@ export default function AdminUsersPage() {
                       <td className="py-3 pr-4 whitespace-nowrap text-muted-foreground">
                         {formatThaiDateTime(u.createdAt)}
                       </td>
+                      <td className="py-3 pr-4"><Badge variant={u.hasSubmittedSurvey ? "default" : "secondary"}>{u.hasSubmittedSurvey ? "ตอบแล้ว" : "ยังไม่ตอบ"}</Badge></td>
                       <td className="py-3 pr-0 text-right">
                         <Button asChild size="sm" variant="outline">
                           <Link href={`/admin/users/${u.id}`}>ดูรายละเอียด</Link>
@@ -128,7 +127,7 @@ export default function AdminUsersPage() {
                 <Link
                   key={u.id}
                   href={`/admin/users/${u.id}`}
-                  className="flex items-center gap-3 rounded-xl border border-border bg-card p-3 transition-colors hover:bg-muted/60"
+                  className={`flex items-center gap-3 transition-colors hover:bg-muted/60 ${styles.mobileUser}`}
                 >
                   <Avatar>
                     <AvatarFallback>{initials}</AvatarFallback>
@@ -141,6 +140,7 @@ export default function AdminUsersPage() {
                       </Badge>
                     </div>
                     <p className="truncate text-sm text-muted-foreground">{u.email}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">แบบประเมิน: {u.hasSubmittedSurvey ? "ตอบแล้ว" : "ยังไม่ตอบ"}</p>
                   </div>
                 </Link>
               );

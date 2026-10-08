@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
-import { ClipboardList, LogOut, Pencil, Save, ScanLine, X } from "lucide-react";
+import { ArrowRight, ClipboardList, Leaf, LogOut, Mail, Pencil, Phone, Save, ScanLine, ShieldCheck, Sprout, UserRound, X } from "lucide-react";
+import styles from "./profile.module.css";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -57,9 +58,11 @@ export default function ProfilePage() {
   }
 
   async function handleSave() {
+    if (saving) return;
+    if (!draftFullName.trim()) { toast.error("กรุณาระบุชื่อ-นามสกุล"); return; }
     setSaving(true);
     try {
-      await updateProfile({ fullName: draftFullName, phoneNumber: draftPhoneNumber });
+      await updateProfile({ fullName: draftFullName.trim(), phoneNumber: draftPhoneNumber.trim() });
       await refresh();
       setEditing(false);
       toast.success("บันทึกข้อมูลสำเร็จ");
@@ -80,68 +83,76 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="mx-auto flex max-w-4xl flex-col gap-6">
-      <div>
-        <span className="text-xs font-bold tracking-wide text-primary">บัญชีผู้ใช้</span>
-        <h1 className="text-2xl font-bold">โปรไฟล์</h1>
-        <p className="text-muted-foreground">ข้อมูลบัญชีของคุณ</p>
+    <div className={styles.page}>
+      <div className={styles.backdrop} aria-hidden><Leaf /><Leaf /></div>
+      <div className={styles.intro}>
+        <span className={styles.introIcon}><UserRound aria-hidden /></span>
+        <div><span className={styles.eyebrow}>บัญชีผู้ใช้</span>
+        <h1>โปรไฟล์ของคุณ</h1>
+        <p>จัดการข้อมูลส่วนตัว เพื่อการดูแลสวนปาล์มที่สะดวกยิ่งขึ้น</p></div>
       </div>
 
       {/* Profile banner */}
-      <div className="flex flex-col items-start gap-4 rounded-3xl bg-primary p-6 text-primary-foreground sm:flex-row sm:items-center md:p-8">
-        <Avatar size="lg" className="size-16 border-2 border-primary-foreground/30 bg-primary-foreground/15 text-lg">
-          <AvatarFallback className="bg-transparent text-primary-foreground">{initials}</AvatarFallback>
+      <div className={styles.banner}>
+        <div className={styles.bannerPhoto} aria-hidden />
+        <Avatar size="lg" className={styles.avatar}>
+          <AvatarFallback className={styles.avatarFallback}>{initials}</AvatarFallback>
         </Avatar>
-        <div className="flex-1">
+        <div className={styles.identity}>
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-lg font-bold md:text-xl">{currentUser.fullName}</h2>
-            <Badge variant="secondary">{currentUser.role === "admin" ? "ผู้ดูแลระบบ" : "เกษตรกร"}</Badge>
+            <h2>{currentUser.fullName}</h2>
+            <Badge className={styles.roleBadge}>{currentUser.role === "admin" ? <ShieldCheck /> : <Sprout />}{currentUser.role === "admin" ? "ผู้ดูแลระบบ" : "เกษตรกร"}</Badge>
           </div>
-          <p className="text-sm text-primary-foreground/80">{currentUser.email}</p>
-          <p className="mt-1 text-xs text-primary-foreground/70">
+          <p className={styles.identityEmail}>{currentUser.email}</p>
+          <p className={styles.joined}>
             สมัครสมาชิกเมื่อ {formatThaiDateTime(currentUser.createdAt)}
           </p>
         </div>
         {diagnosisCount !== null && (
-          <div className="flex items-center gap-2 rounded-2xl bg-primary-foreground/10 px-4 py-3">
+          <div className={styles.count}>
             <ScanLine className="size-5" aria-hidden />
             <div>
               <p className="text-lg font-bold leading-none">{diagnosisCount}</p>
-              <p className="text-xs text-primary-foreground/70">ครั้งที่วินิจฉัยแล้ว</p>
+              <p className="text-xs">รายการตรวจวิเคราะห์</p>
             </div>
           </div>
         )}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="text-base">ข้อมูลส่วนตัว</CardTitle>
+      <div className={styles.columns}>
+        <Card className={styles.detailsCard}>
+          <CardHeader className={styles.cardHeader}>
+            <CardTitle className={styles.cardTitle}><span><UserRound aria-hidden /></span><div>ข้อมูลส่วนตัว<p>ตรวจสอบและอัปเดตข้อมูลบัญชีของคุณ</p></div></CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="fullName">ชื่อ-นามสกุล</Label>
+              <Label htmlFor="fullName"><UserRound className="size-4" aria-hidden />ชื่อ-นามสกุล</Label>
               <Input
                 id="fullName"
-                className="h-11"
+                className={styles.input}
                 value={editing ? draftFullName : currentUser.fullName}
-                disabled={!editing}
+                disabled={!editing || saving}
+                autoComplete="name"
+                maxLength={100}
                 onChange={(e) => setDraftFullName(e.target.value)}
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="email">อีเมล</Label>
-              <Input id="email" className="h-11" value={currentUser.email} disabled />
+              <Label htmlFor="email"><Mail className="size-4" aria-hidden />อีเมล</Label>
+              <Input id="email" className={styles.input} value={currentUser.email} disabled />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor="phoneNumber">เบอร์โทร</Label>
+              <Label htmlFor="phoneNumber"><Phone className="size-4" aria-hidden />เบอร์โทร</Label>
               <Input
                 id="phoneNumber"
-                className="h-11"
+                className={styles.input}
                 value={editing ? draftPhoneNumber : currentUser.phoneNumber ?? ""}
-                disabled={!editing}
+                disabled={!editing || saving}
+                type="tel"
+                autoComplete="tel"
+                maxLength={20}
                 onChange={(e) => setDraftPhoneNumber(e.target.value)}
                 placeholder="ไม่ระบุ"
               />
@@ -152,20 +163,26 @@ export default function ProfilePage() {
                 <Button variant="outline" size="lg" className="h-11" onClick={handleCancel} disabled={saving}>
                   <X /> ยกเลิก
                 </Button>
-                <Button size="lg" className="h-11" onClick={handleSave} disabled={saving}>
+                <Button size="lg" className={styles.saveButton} onClick={handleSave} disabled={saving || !draftFullName.trim()}>
                   <Save /> {saving ? "กำลังบันทึก..." : "บันทึก"}
                 </Button>
               </div>
             ) : (
-              <Button variant="outline" size="lg" className="h-11 w-full" onClick={handleStartEditing}>
+              <Button variant="outline" size="lg" className={styles.editButton} onClick={handleStartEditing}>
                 <Pencil /> แก้ไขข้อมูล
               </Button>
             )}
           </CardContent>
         </Card>
 
-        <div className="flex flex-col gap-6">
-          <div className="relative overflow-hidden rounded-2xl">
+        <div className={styles.sidebar}>
+          <div className={styles.accountCard}>
+            <h2><span><ShieldCheck aria-hidden /></span>บัญชี PalmGuard</h2>
+            <p>ดูข้อมูลและผลการตรวจวิเคราะห์ของคุณได้ในที่เดียว</p>
+            <Link href="/history"><ScanLine /> ประวัติการวินิจฉัย <ArrowRight /></Link>
+            {currentUser.role === "admin" && <Link href="/admin"><ShieldCheck />จัดการระบบ <ArrowRight /></Link>}
+          </div>
+          <div className={styles.surveyCard}>
             <Image src="/auth-hero-1.png" alt="" width={400} height={260} className="h-40 w-full object-cover" />
             <div
               aria-hidden
@@ -189,9 +206,10 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          <Button variant="destructive" size="lg" className="h-11 w-full" onClick={handleLogout}>
+          <Button variant="outline" size="lg" className={styles.logoutButton} onClick={handleLogout} disabled={saving}>
             <LogOut /> ออกจากระบบ
           </Button>
+          <p className={styles.motto}>ดูแลปาล์ม ให้คุณก้าวไกล <Leaf aria-hidden /></p>
         </div>
       </div>
     </div>

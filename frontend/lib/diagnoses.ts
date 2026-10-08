@@ -19,6 +19,7 @@ interface DiagnosisRaw {
   id: string;
   image_url: string;
   status: DiagnosisStatus;
+  failure_reason?: string | null;
   result: DiagnosisResultRaw | null;
   created_at: string;
 }
@@ -46,6 +47,7 @@ function mapDiagnosis(raw: DiagnosisRaw): Diagnosis {
     id: raw.id,
     imageUrl: raw.image_url,
     status: raw.status,
+    failureReason: raw.failure_reason ?? null,
     result: mapResult(raw.result),
     createdAt: raw.created_at,
   };

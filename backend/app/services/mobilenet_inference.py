@@ -54,7 +54,8 @@ def _predict_sync(image_bytes: bytes) -> dict:
 
     model = _load_model()
     try:
-        return ai_predict(image_bytes, model, model_version=f"mobilenetv2:{ai_config.MODEL_VERSION}")
+        return ai_predict(image_bytes, model, model_version=f"mobilenetv2:{ai_config.MODEL_VERSION}",
+                          confidence_threshold=settings.MIN_CONFIDENCE_THRESHOLD)
     except ValueError as exc:
         # ai/src/preprocessing.py rejects corrupt/invalid image bytes this way.
         raise InferenceError(str(exc)) from exc
@@ -75,7 +76,11 @@ async def run_inference(image_bytes: bytes, content_type: str = "image/jpeg") ->
         # UNKNOWN isn't a disease_classes row (docs/DATABASE.md) — it means the
         # model wasn't confident in any of the 4 trained classes, not a result
         # to persist. Same "Low Confidence" outcome as docs/AI_MODEL.md#confidence.
-        raise InferenceError("ความเชื่อมั่นของผลวิเคราะห์ต่ำเกินไป กรุณาถ่ายภาพให้ชัดเจนขึ้น")
+        raise InferenceError(
+            f"โมเดลยังแยกโรคในภาพนี้ได้ไม่ชัดเจน (ความเชื่อมั่น {result['confidence_score']:.1%} "
+            f"ต่ำกว่าเกณฑ์ {settings.MIN_CONFIDENCE_THRESHOLD:.0%}) "
+            "กรุณาถ่ายภาพระยะใกล้ให้เห็นอาการบนใบชัดเจน แล้วลองใหม่อีกครั้ง"
+        )
 
     return InferenceResult(
         class_code=result["class_code"],

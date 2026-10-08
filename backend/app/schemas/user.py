@@ -1,9 +1,9 @@
 import uuid
-from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.schemas.auth import PHONE_PATTERN
+from app.schemas.datetime import UtcDateTime
 
 
 class UserResponse(BaseModel):
@@ -14,7 +14,8 @@ class UserResponse(BaseModel):
     full_name: str
     phone_number: str | None
     role: str
-    created_at: datetime
+    created_at: UtcDateTime
+    has_submitted_survey: bool = False
 
 
 class UserUpdateRequest(BaseModel):

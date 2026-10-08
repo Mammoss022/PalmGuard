@@ -3,7 +3,7 @@
 import { apiFetch } from "@/lib/api-client";
 import type { SatisfactionSurvey } from "@/lib/types";
 
-interface SurveyResponseRaw {
+export interface SurveyResponseRaw {
   id: string;
   satisfaction_rating: number;
   ease_of_use_rating: number;
@@ -13,7 +13,7 @@ interface SurveyResponseRaw {
   created_at: string;
 }
 
-function mapSurvey(raw: SurveyResponseRaw): SatisfactionSurvey {
+export function mapSurvey(raw: SurveyResponseRaw): SatisfactionSurvey {
   return {
     id: raw.id,
     satisfactionRating: raw.satisfaction_rating,
@@ -23,6 +23,17 @@ function mapSurvey(raw: SurveyResponseRaw): SatisfactionSurvey {
     comments: raw.comments,
     createdAt: raw.created_at,
   };
+}
+
+export interface SurveyStatus {
+  hasSubmitted: boolean;
+  eligibleForPrompt: boolean;
+  survey: SatisfactionSurvey | null;
+}
+
+export async function getSurveyStatus(): Promise<SurveyStatus> {
+  const raw = await apiFetch<{ has_submitted: boolean; eligible_for_prompt: boolean; survey: SurveyResponseRaw | null }>("/surveys/me");
+  return { hasSubmitted: raw.has_submitted, eligibleForPrompt: raw.eligible_for_prompt, survey: raw.survey ? mapSurvey(raw.survey) : null };
 }
 
 export async function createSurvey(input: {

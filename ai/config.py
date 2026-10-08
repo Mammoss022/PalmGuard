@@ -66,7 +66,7 @@ FINE_TUNE_UNFREEZE_LAYERS = 30  # unfreeze this many layers counting from the to
 
 EARLY_STOPPING_PATIENCE = 5
 
-MODEL_VERSION = "v1.2"  # docs/AI_MODEL.md#model-versioning: mobilenetv2-vX.Y
+MODEL_VERSION = "v1.3"  # docs/AI_MODEL.md#model-versioning: mobilenetv2-vX.Y
 
 # A low top-1 softmax probability across all 3 trained classes means the
 # photo is too blurry/ambiguous (or not a palm leaf at all, since this model

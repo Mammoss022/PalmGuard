@@ -16,7 +16,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import config  # noqa: E402
-from src.preprocessing import ImageSource, load_and_preprocess  # noqa: E402
+from src.preprocessing import ImageSource, prepare_model_input  # noqa: E402
 
 _model_cache: dict[str, keras.Model] = {}
 
@@ -47,8 +47,15 @@ def predict(
     (imperfectly) the case of a non-palm photo, since none of the 3 trained
     classes should score confidently on it.
     """
-    pixels = load_and_preprocess(image)
-    batch = np.expand_dims(pixels, axis=0)
+    batch = prepare_model_input(image)
+    input_shape = model.input_shape
+    if isinstance(input_shape, list) or len(input_shape) != batch.ndim:
+        raise ValueError("Model must accept a single NHWC image batch")
+    if any(expected is not None and expected != actual
+           for expected, actual in zip(input_shape, batch.shape)):
+        raise ValueError(
+            f"Model input shape {input_shape} does not match image batch {batch.shape}"
+        )
 
     probs = model.predict(batch, verbose=0)[0]
     class_index = int(np.argmax(probs))

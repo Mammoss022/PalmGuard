@@ -9,8 +9,10 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DiagnosisListItem } from "@/components/diagnosis/diagnosis-list-item";
+import styles from "@/components/admin/admin.module.css";
 import { useAuth } from "@/lib/auth-context";
-import { getUser, listUserDiagnoses } from "@/lib/admin";
+import { getUser, listUserDiagnoses, listAdminSurveys, type AdminSurvey } from "@/lib/admin";
+import { SurveyAnswers } from "@/components/survey/survey-answers";
 import { ApiError } from "@/lib/api-client";
 import { diseaseVisual, formatConfidence, formatThaiDateTime } from "@/lib/disease-ui";
 import type { AppUser, Diagnosis } from "@/lib/types";
@@ -22,6 +24,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
   const [targetUser, setTargetUser] = useState<AppUser | null>(null);
   const [diagnoses, setDiagnoses] = useState<Diagnosis[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [surveys, setSurveys] = useState<AdminSurvey[]>([]);
 
   useEffect(() => {
     if (currentUser.role !== "admin") {
@@ -29,11 +32,12 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
       return;
     }
     let cancelled = false;
-    Promise.all([getUser(id), listUserDiagnoses(id, { pageSize: 100 })])
-      .then(([u, res]) => {
+    Promise.all([getUser(id), listUserDiagnoses(id, { pageSize: 100 }), listAdminSurveys({ userId: id })])
+      .then(([u, res, answers]) => {
         if (cancelled) return;
         setTargetUser(u);
         setDiagnoses(res.items);
+        setSurveys(answers.items);
       })
       .catch((err) => {
         if (!cancelled) setError(err instanceof ApiError ? err.message : "ไม่พบผู้ใช้งานนี้");
@@ -80,19 +84,8 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
 
   return (
     <div className="mx-auto flex max-w-4xl flex-col gap-6">
-      <div>
-        <Link
-          href="/admin"
-          className="mb-2 inline-flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="size-4" aria-hidden /> กลับรายชื่อผู้ใช้
-        </Link>
-        <span className="block text-xs font-bold tracking-wide text-primary">ผู้ดูแลระบบ</span>
-        <h1 className="text-2xl font-bold">ข้อมูลผู้ใช้</h1>
-      </div>
-
       {/* User banner */}
-      <div className="flex flex-col items-start gap-4 rounded-3xl bg-primary p-6 text-primary-foreground sm:flex-row sm:items-center md:p-8">
+      <div className={styles.userBanner}>
         <Avatar size="lg" className="size-16 border-2 border-primary-foreground/30 bg-primary-foreground/15 text-lg">
           <AvatarFallback className="bg-transparent text-primary-foreground">{initials}</AvatarFallback>
         </Avatar>
@@ -119,8 +112,13 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
         </div>
       </div>
 
+      <Card>
+        <CardHeader><CardTitle className="flex flex-wrap items-center gap-2 text-base">แบบประเมินความพึงพอใจ <Badge variant={targetUser.hasSubmittedSurvey ? "default" : "secondary"}>{targetUser.hasSubmittedSurvey ? "ตอบแล้ว" : "ยังไม่ตอบ"}</Badge></CardTitle></CardHeader>
+        <CardContent>{surveys.length === 0 ? <p className="text-sm text-muted-foreground">ผู้ใช้รายนี้ยังไม่ได้ส่งแบบประเมิน</p> : <div className="space-y-4"><p className="text-xs text-muted-foreground">คำตอบของผู้ใช้ อ่านได้อย่างเดียว</p>{surveys.map(s => <SurveyAnswers key={s.id} survey={s} />)}</div>}</CardContent>
+      </Card>
+
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className={styles.statGrid}>
         <Card>
           <CardHeader>
             <CardTitle className="text-sm font-medium text-muted-foreground">วินิจฉัยทั้งหมด</CardTitle>

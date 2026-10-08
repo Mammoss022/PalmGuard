@@ -37,9 +37,11 @@ class Diagnosis(Base):
     class_probabilities: Mapped[dict[str, float] | None] = mapped_column(JSON, nullable=True)
     model_version: Mapped[str | None] = mapped_column(String(50), nullable=True)
     status: Mapped[str] = mapped_column(String(20), nullable=False, default=STATUS_PROCESSING)
+    failure_reason: Mapped[str | None] = mapped_column(String(500), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False, index=True
     )
 
     user: Mapped["User"] = relationship(back_populates="diagnoses")
     disease_class: Mapped["DiseaseClass | None"] = relationship(back_populates="diagnoses")
+    assessment = relationship("LeafAssessment", back_populates="diagnosis", uselist=False, cascade="all, delete-orphan")

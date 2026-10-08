@@ -77,7 +77,7 @@ export default function ResultPage({ params }: { params: Promise<{ id: string }>
         </div>
         <Alert variant="destructive">
           <AlertDescription>
-            ไม่สามารถวิเคราะห์ภาพนี้ได้ กรุณาตรวจสอบว่าเป็นภาพใบปาล์มน้ำมันที่ชัดเจน แล้วลองใหม่อีกครั้ง
+            {diagnosis.failureReason ?? "รายการนี้วิเคราะห์ไม่สำเร็จ และไม่มีข้อมูลสาเหตุที่บันทึกไว้ กรุณาลองวินิจฉัยใหม่อีกครั้ง"}
           </AlertDescription>
         </Alert>
         <Button asChild size="lg" className="h-11">
@@ -169,14 +169,6 @@ export default function ResultPage({ params }: { params: Promise<{ id: string }>
               <CardContent className="text-sm text-muted-foreground">{result.recommendationTh}</CardContent>
             </Card>
           )}
-
-          <Alert className="border-warning/40 bg-warning/10">
-            <ShieldAlert className="size-4 text-warning-foreground" />
-            <AlertDescription>
-              นี่เป็นเพียงคำแนะนำเบื้องต้นจาก AI ไม่ใช่การวินิจฉัยทางการเกษตรอย่างเป็นทางการ
-              หากอาการรุนแรงควรปรึกษาผู้เชี่ยวชาญด้านการเกษตร
-            </AlertDescription>
-          </Alert>
 
           <div className="grid grid-cols-2 gap-3">
             <Button asChild size="lg" variant="outline" className="h-11">

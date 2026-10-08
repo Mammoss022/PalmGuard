@@ -5,3 +5,4 @@ from app.models.user import User  # noqa: F401
 from app.models.disease_class import DiseaseClass  # noqa: F401
 from app.models.diagnosis import Diagnosis  # noqa: F401
 from app.models.satisfaction_survey import SatisfactionSurvey  # noqa: F401
+from app.models.leaf_assessment import LeafAssessment  # noqa: F401

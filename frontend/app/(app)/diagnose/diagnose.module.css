@@ -1,0 +1,69 @@
+.page { position: relative; left: 50%; width: calc(100vw - 48px); max-width: 1460px; transform: translateX(-50%); isolation: isolate; color: #164d46; padding: 0 0 20px; }
+.backdrop { position: absolute; z-index: -1; pointer-events: none; top: -24px; bottom: -100px; left: 50%; width: 100vw; transform: translateX(-50%); overflow: hidden; background: radial-gradient(ellipse at 8% 95%, #e3f0e7, transparent 35%), linear-gradient(120deg, #f4f9f7, #fafdfc 50%, #f0f7f3); }
+.palmPhoto { position: absolute; right: 0; top: 0; width: min(670px, 55vw); height: 330px; background: url('/diagnose/leaf-examples.png') left center / 300% 100%; opacity: .5; mask-image: linear-gradient(to left, black 0%, transparent 95%), linear-gradient(to bottom, black 0%, transparent 98%); mask-composite: intersect; }
+.backgroundLeaf { position: absolute; bottom: 0; left: -50px; width: 260px; height: 260px; color: #77ad86; opacity: .2; transform: rotate(35deg); }
+.intro { display: flex; gap: 27px; align-items: center; min-height: 110px; margin-bottom: 20px; }
+.intro > div:last-child { min-width: 0; }
+.introMark { position: relative; display: grid; place-items: center; flex-shrink: 0; width: 102px; height: 102px; border-radius: 50%; background: linear-gradient(135deg,#e7f3e3,#d1e8d5); color: #267e51; }
+.introMark > svg { width: 58px; height: 58px; fill: #38834e; stroke: #f4fbf5; stroke-width: 1.2; transform: rotate(-12deg); }
+.introMark span { position: absolute; right: -20px; top: 0; color: #4f9555; }
+.introMark span svg { width: 38px; height: 38px; }
+.eyebrow { font-size: 14px; font-weight: 600; }
+.title { font-size: clamp(27px, 2.3vw, 38px); font-weight: 700; line-height: 1.35; color: #123e46; margin: 4px 0; }
+.subtitle { font-size: 16px; line-height: 1.7; color: #4c5f72; }
+.columns { display: grid; grid-template-columns: minmax(0, 2.22fr) minmax(300px, 1fr); gap: 24px; align-items: start; }
+.uploadPanel { display: flex; flex-direction: column; gap: 21px; padding: 32px; background: rgba(255,255,255,.94); border: 1px solid #fff; border-radius: 28px; box-shadow: 0 12px 36px #19594208; }
+.dropzone { position: relative; display: flex; align-items: center; justify-content: center; height: 297px; cursor: pointer; overflow: hidden; border: 2px dashed #cbe6d9; border-radius: 18px; background: radial-gradient(ellipse at center, #f7fcf9, #f0f8f4); transition: border-color .2s, background .2s; outline-offset: 4px; }
+.dropzone:hover, .dragging { border-color: #438c6d; background: #edf8f0; }
+.dropLeafTop, .dropLeafBottom { position: absolute; width: 108px; height: 108px; color: #b2d4c2; opacity: .3; fill: currentColor; stroke-width: .8; pointer-events: none; }
+.dropLeafTop { left: 6px; top: 3px; transform: rotate(-75deg); }
+.dropLeafBottom { right: -6px; bottom: -8px; transform: rotate(155deg); }
+.dropContent { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 20px; }
+.uploadIcon { display: grid; place-items: center; width: 92px; height: 92px; margin-bottom: 15px; border-radius: 50%; background: linear-gradient(140deg, #e7f3dc, #cce6d9); color: #116544; }
+.uploadIcon svg { width: 49px; height: 49px; stroke-width: 2; }
+.dropTitle { font-size: 25px; font-weight: 700; line-height: 1.5; }
+.dropHint { color: #248454; font-size: 17px; font-weight: 600; margin: 5px 0; }
+.fileHint { font-size: 15px; color: #6c7d8d; }
+.uploadMethods { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.methodButton { height: 55px; justify-content: flex-start; padding: 0 24px; border-radius: 18px; border-color: #e2e9eb; background: #fff; color: #355364; font-size: 15px; font-weight: 500; box-shadow: 0 2px 6px #174c3704; }
+.methodButton > svg { width: 25px; height: 25px; color: #195f4b; }
+.methodButton .chevron { margin-left: auto; width: 18px; height: 18px; }
+.privacy { display: flex; gap: 15px; padding: 18px 23px; border-radius: 20px; background: #f0f8f4; color: #1b664b; }
+.privacy > svg { width: 27px; height: 27px; color: #247a50; }
+.privacy p:first-child { font-size: 16px; }
+.privacy p:last-child { color: #6a7e8a; font-size: 13px; line-height: 1.8; margin-top: 2px; }
+.submitRow { display: flex; align-items: center; gap: 18px; }
+.submitButton { flex: 1; height: 51px; border-radius: 999px; background: linear-gradient(110deg,#398768,#408b69); color: white; font-size: 15px; font-weight: 600; }
+.submitButton:disabled { opacity: 1; background: #83ad98; cursor: not-allowed; }
+.submitButton:not(:disabled):hover { background: #256e51; }
+.submitRow > span { white-space: nowrap; font-size: 13px; color: #596d7f; }
+.submitRow > span svg { width: 21px; height: 21px; color: #ef9a19; }
+.sidebar { display: flex; flex-direction: column; gap: 20px; }
+.tipsPanel, .samplesPanel { border: 1px solid #eaf2ee; border-radius: 20px; background: rgba(255,255,255,.95); padding: 23px 25px; box-shadow: 0 6px 20px #1e5b3804; }
+.sideHeading, .samplesHeading { display: flex; align-items: center; gap: 18px; font-size: 21px; font-weight: 700; color: #155b46; }
+.sideIcon { display: grid; place-items: center; width: 59px; height: 59px; flex-shrink: 0; border-radius: 50%; background: linear-gradient(130deg,#eff8df,#cce7d5); color: #1c7651; }
+.sideIcon svg { width: 28px; height: 28px; }
+.tips { display: flex; flex-direction: column; gap: 19px; margin-top: 21px; }
+.tips li { display: flex; align-items: flex-start; gap: 13px; font-size: 15px; line-height: 1.65; color: #536479; }
+.checkIcon { display: grid; place-items: center; width: 20px; height: 20px; margin-top: 2px; flex-shrink: 0; border-radius: 50%; background: #408969; color: white; }
+.checkIcon svg { width: 14px; height: 14px; }
+.samplesPanel { padding-top: 13px; padding-bottom: 16px; }
+.samplesHeading { font-size: 16px; gap: 16px; }
+.samplesHeading .sideIcon { width: 49px; height: 49px; }
+.samples { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin-top: 13px; }
+.sampleImage { height: 91px; width: 100%; border-radius: 13px; background-image: url('/diagnose/leaf-examples.png'); background-size: 300% 100%; background-repeat: no-repeat; background-color: #dcebe0; }
+.samples figcaption { font-size: 12px; text-align: center; margin-top: 9px; color: #536479; }
+.sampleNote { font-size: 10px; color: #86968b; text-align: right; margin-top: 7px; }
+.motto { position: relative; align-self: center; max-width: calc(100% - 40px); margin: 23px 20px 0; padding-right: 16px; color: #5c8f69; font-size: 20px; line-height: 1.6; font-style: italic; text-align: center; transform: rotate(-7deg); }
+.motto span { margin-left: 40px; }
+.motto::after { content: ''; position: absolute; left: 60px; right: -5px; bottom: -5px; height: 14px; border-top: 2px solid #8aa666; border-radius: 50%; }
+.motto svg { position: absolute; width: 26px; height: 26px; right: -6px; bottom: -4px; color: #8aa666; }
+:global(.dark) .backdrop { background: #14241d; }
+:global(.dark) .uploadPanel, :global(.dark) .tipsPanel, :global(.dark) .samplesPanel { background: #1c3026; border-color: #2e493b; }
+:global(.dark) .title, :global(.dark) .page, :global(.dark) .sideHeading, :global(.dark) .samplesHeading { color: #cce8d9; }
+:global(.dark) .subtitle, :global(.dark) .tips li, :global(.dark) .samples figcaption, :global(.dark) .fileHint { color: #b0c5bd; }
+:global(.dark) .dropzone, :global(.dark) .privacy, :global(.dark) .methodButton { background: #233c2e; color: #cce8d9; border-color: #43694f; }
+@media (min-width: 1500px) { .page { width: calc(100vw - 240px); } }
+@media (max-width: 1050px) { .columns { grid-template-columns: minmax(0,1.7fr) minmax(280px,1fr); gap: 18px; } .uploadPanel { padding: 24px; } .sideHeading { font-size: 18px; gap: 12px; } .tipsPanel, .samplesPanel { padding: 20px; } .methodButton { padding: 0 14px; font-size: 13px; } .submitRow { flex-wrap: wrap; } .submitRow > span { margin-left: auto; } }
+@media (max-width: 800px) { .columns { grid-template-columns: 1fr; } .page { width: calc(100vw - 32px); } .intro { gap: 18px; min-height: 110px; } .introMark { width: 70px; height: 70px; } .introMark > svg { width: 42px; height: 42px; } .introMark span { right: -10px; top: -8px; } .introMark span svg { width: 26px; height: 26px; } .subtitle { font-size: 14px; } .eyebrow { font-size: 12px; } .sidebar { display: grid; grid-template-columns: 1fr 1fr; } .motto { grid-column: 1 / -1; margin-top: 4px; margin-bottom: 20px; } }
+@media (max-width: 540px) { .intro { align-items: flex-start; } .introMark { margin-top: 10px; width: 57px; height: 57px; } .introMark > svg { width: 35px; height: 35px; } .title { font-size: 27px; } .uploadPanel { padding: 18px; border-radius: 22px; gap: 18px; } .dropzone { height: 280px; } .dropTitle { font-size: 22px; } .uploadMethods { grid-template-columns: 1fr; gap: 10px; } .methodButton { padding: 0 20px; font-size: 14px; } .privacy { padding: 15px; } .sidebar { grid-template-columns: 1fr; } .sampleImage { height: 105px; } .submitRow { gap: 10px; } .submitButton { flex-basis: 100%; } }

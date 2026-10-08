@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Leaf, LogOut, ShieldCheck, User as UserIcon } from "lucide-react";
+import { ClipboardList, Leaf, LogOut, ShieldCheck, User as UserIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { navItems } from "@/components/layout/nav-items";
 import { useAuth } from "@/lib/auth-context";
 import { logout } from "@/lib/auth";
+import styles from "./site-header.module.css";
 import {
   Avatar,
   AvatarFallback,
@@ -24,6 +25,7 @@ export function SiteHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const { user: currentUser } = useAuth();
+  const historyPage = pathname === "/history" || pathname === "/diagnose" || pathname === "/dashboard" || pathname === "/profile" || pathname.startsWith("/admin");
 
   async function handleLogout() {
     await logout();
@@ -38,13 +40,12 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 hidden border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 md:block">
-      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
-        <Link href="/dashboard" className="flex items-center gap-2 font-heading text-lg font-bold text-primary">
-          <Leaf className="size-6" aria-hidden />
-          PalmGuard
+      <div className={cn("mx-auto flex h-16 max-w-5xl items-center justify-between px-6", historyPage && styles.historyInner, pathname === "/dashboard" && styles.dashboardInner)}>
+        <Link href="/dashboard" className={cn("flex items-center gap-2 font-heading text-lg font-bold text-primary", historyPage && styles.historyLogo)}>
+          {historyPage ? <><span className={styles.logoMark}><Leaf className="size-7" aria-hidden /></span><span><span className={styles.logoTitle}>PalmGuard</span><span className={styles.logoSubtitle}>ดูแลปาล์ม ให้คุณก้าวไกล</span></span></> : <><Leaf className="size-6" aria-hidden />PalmGuard</>}
         </Link>
 
-        <nav aria-label="เมนูหลัก" className="flex items-center gap-1">
+        <nav aria-label="เมนูหลัก" className={cn("flex items-center gap-1", historyPage && styles.historyNav)}>
           {navItems.map(({ href, label, icon: Icon }) => {
             const active = pathname === href || pathname.startsWith(href + "/");
             return (
@@ -67,7 +68,7 @@ export function SiteHeader() {
         </nav>
 
         <DropdownMenu>
-          <DropdownMenuTrigger className="rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring/50">
+          <DropdownMenuTrigger aria-label="เมนูบัญชีผู้ใช้" className="rounded-full outline-none focus-visible:ring-3 focus-visible:ring-ring/50">
             <Avatar>
               <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
@@ -78,6 +79,12 @@ export function SiteHeader() {
             <DropdownMenuItem onClick={() => router.push("/profile")}>
               <UserIcon /> โปรไฟล์
             </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => router.push("/survey")}><ClipboardList /> แบบประเมิน</DropdownMenuItem>
+            {currentUser.role === "admin" && (
+              <DropdownMenuItem onClick={() => router.push("/admin/dashboard")}>
+                <ShieldCheck /> Dashboard ผู้ดูแลระบบ
+              </DropdownMenuItem>
+            )}
             {currentUser.role === "admin" && (
               <DropdownMenuItem onClick={() => router.push("/admin")}>
                 <ShieldCheck /> ผู้ดูแลระบบ

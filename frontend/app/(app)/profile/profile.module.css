@@ -1,0 +1,67 @@
+.page { position: relative; left: 50%; width: calc(100vw - 48px); max-width: 1200px; transform: translateX(-50%); isolation: isolate; color: #184d49; padding-bottom: 15px; }
+.backdrop { position: absolute; z-index: -1; top: -24px; bottom: -100px; left: 50%; width: 100vw; transform: translateX(-50%); pointer-events: none; overflow: hidden; background: radial-gradient(ellipse at 90% 0%,#deefe5,transparent 50%),linear-gradient(125deg,#f3faf6,#fafdfb); }
+.backdrop svg { position: absolute; width: 230px; height: 230px; color: #8ab998; fill: currentColor; stroke-width: .5; opacity: .22; }
+.backdrop svg:first-child { bottom: -30px; left: -80px; transform: rotate(30deg); }
+.backdrop svg:last-child { right: -70px; top: -40px; transform: rotate(155deg); }
+.intro { display: flex; align-items: center; gap: 21px; margin: 6px 0 24px; }
+.introIcon { display: grid; place-items: center; flex-shrink: 0; width: 70px; height: 70px; border-radius: 50%; color: #267653; background: linear-gradient(130deg,#eaf5e0,#d0e9d9); }
+.introIcon svg { width: 33px; height: 33px; }
+.eyebrow { font-size: 12px; font-weight: 600; color: #378064; }
+.intro h1 { font-size: clamp(26px,2.5vw,34px); font-weight: 700; color: #173e4b; margin: 3px 0; }
+.intro p { font-size: 14px; color: #668092; line-height: 1.6; }
+.banner { position: relative; display: flex; align-items: center; gap: 23px; padding: 29px 34px; min-height: 155px; border: 1px solid #e1eee5; border-radius: 24px; overflow: hidden; background: linear-gradient(115deg,#e8f4ed,#d8eede); }
+.bannerPhoto { position: absolute; right: 0; top: 0; width: 42%; height: 100%; opacity: .32; background: url('/auth-hero-1.png') center / cover; mask-image: linear-gradient(to right,transparent,black); }
+.avatar { width: 85px; height: 85px; flex-shrink: 0; border: 4px solid #ffffffb0; box-shadow: 0 5px 20px #246a3420; }
+.avatarFallback { background: linear-gradient(135deg,#4f9870,#176647); color: white; font-size: 26px; font-weight: 600; }
+.identity { position: relative; min-width: 0; flex: 1; }
+.identity h2 { font-size: 24px; font-weight: 700; color: #164d46; overflow-wrap: anywhere; }
+.roleBadge { padding: 5px 11px; border-radius: 999px; background: #ffffffb8; color: #30754c; border: 1px solid #d2e6d7; font-size: 11px; }
+.identityEmail { margin-top: 7px; color: #547b6c; font-size: 14px; overflow-wrap: anywhere; }
+.joined { margin-top: 5px; color: #6c877d; font-size: 11px; }
+.count { position: relative; display: flex; gap: 13px; align-items: center; padding: 17px 22px; border: 1px solid #ffffffa0; border-radius: 17px; background: #ffffffba; color: #20624b; }
+.count > svg { width: 27px; height: 27px; }
+.count p:first-child { font-size: 26px; }
+.count p:last-child { margin-top: 6px; color: #6b847b; }
+.columns { display: grid; grid-template-columns: minmax(0,1.85fr) minmax(280px,1fr); align-items: start; gap: 23px; margin-top: 24px; }
+.detailsCard { min-width: 0; border: 1px solid #e1ece7; border-radius: 23px; background: #ffffffed; box-shadow: 0 8px 25px #285d3b06; padding-top: 25px; padding-bottom: 25px; }
+.cardHeader { margin-bottom: 5px; }
+.cardTitle { display: flex; gap: 13px; align-items: center; font-size: 18px; color: #1d5b4c; }
+.cardTitle > span { display: grid; place-items: center; width: 45px; height: 45px; flex-shrink: 0; border-radius: 50%; background: #e9f4eb; color: #378062; }
+.cardTitle svg { width: 23px; height: 23px; }
+.cardTitle p { margin-top: 5px; font-size: 12px; color: #81958c; font-weight: 400; }
+.detailsCard label { color: #526e68; font-size: 13px; margin-bottom: 3px; gap: 8px; }
+.detailsCard label svg { color: #7e9a8e; }
+.input { height: 49px; border: 1px solid #deebe3; border-radius: 12px; background: #fbfdfb; color: #294b46; padding: 0 15px; }
+.input:disabled { opacity: 1; background: #f4f8f5; color: #687f74; }
+.input:focus-visible { border-color: #6fa586; --tw-ring-color: #a2cdb350; }
+.editButton, .saveButton { height: 47px; border-radius: 999px; width: 100%; background: linear-gradient(110deg,#36856a,#297450); color: white; border: 0; margin-top: 8px; }
+.editButton:hover, .saveButton:hover { background: #236b4e; color: white; }
+.sidebar { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.accountCard { border: 1px solid #e1ece7; border-radius: 20px; padding: 21px; background: #ffffffee; box-shadow: 0 5px 18px #24542e04; }
+.accountCard h2 { display: flex; align-items: center; gap: 12px; font-size: 17px; font-weight: 700; }
+.accountCard h2 span { display: grid; place-items: center; width: 43px; height: 43px; flex-shrink: 0; border-radius: 50%; background: #e8f3e4; color: #347857; }
+.accountCard h2 svg { width: 23px; height: 23px; }
+.accountCard > p { color: #7a8e83; font-size: 12px; line-height: 1.8; margin: 12px 0 15px; }
+.accountCard > a { display: flex; align-items: center; gap: 10px; color: #377a59; font-size: 13px; border-top: 1px solid #e9f0eb; padding: 14px 0 0; margin-top: 10px; }
+.accountCard > a svg { width: 17px; height: 17px; }
+.accountCard > a svg:last-child { margin-left: auto; }
+.surveyCard { position: relative; overflow: hidden; border-radius: 20px; }
+.surveyCard > img { height: 195px; }
+.surveyCard > div:last-child { padding: 20px; }
+.surveyCard > div:last-child > p:first-child { font-size: 19px; }
+.surveyCard a { border-radius: 999px; background: #edf8ed; color: #1c6646; }
+.logoutButton { width: 100%; height: 46px; border-radius: 13px; color: #b4605d; border-color: #eedbd8; background: #fff8f6; }
+.logoutButton:hover { background: #fbebe7; color: #a04340; }
+.motto { display: flex; justify-content: center; align-items: center; gap: 9px; color: #70966a; font-size: 16px; font-style: italic; margin-top: 3px; }
+.motto svg { width: 23px; height: 23px; }
+:global(.dark) .backdrop { background: #14261c; }
+:global(.dark) .banner { background: #274433; border-color: #365744; }
+:global(.dark) .intro h1, :global(.dark) .identity h2, :global(.dark) .cardTitle, :global(.dark) .accountCard h2 { color: #cce8d7; }
+:global(.dark) .detailsCard, :global(.dark) .accountCard { background: #1c3025; border-color: #35503e; }
+:global(.dark) .input { background: #243c2c; color: #cde5d4; border-color: #41604b; }
+:global(.dark) .count { background: #243e2dec; border-color: #52735c; color: #c6e1cd; }
+:global(.dark) .identityEmail, :global(.dark) .joined, :global(.dark) .intro p, :global(.dark) .detailsCard label { color: #a6c2ae; }
+:global(.dark) .logoutButton { background: #3c2926; border-color: #684841; color: #f0b2a8; }
+@media (min-width: 1400px) { .page { width: calc(100vw - 192px); } }
+@media (max-width: 850px) { .columns { grid-template-columns: 1fr; } .sidebar { display: grid; grid-template-columns: 1fr 1fr; } .logoutButton, .motto { grid-column: 1 / -1; } .banner { gap: 18px; padding: 24px; flex-wrap: wrap; } .count { padding: 14px 18px; } }
+@media (max-width: 540px) { .page { width: calc(100vw - 32px); } .intro { gap: 15px; align-items: flex-start; } .introIcon { width: 54px; height: 54px; margin-top: 8px; } .introIcon svg { width: 27px; height: 27px; } .intro p { font-size: 12px; } .banner { padding: 23px; gap: 15px; } .avatar { width: 66px; height: 66px; } .avatarFallback { font-size: 22px; } .identity h2 { font-size: 20px; } .identityEmail { font-size: 12px; } .count { width: 100%; margin-top: 3px; } .count p:first-child { font-size: 23px; } .sidebar { display: flex; } .cardTitle p { font-size: 11px; } .detailsCard { border-radius: 20px; } }

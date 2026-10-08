@@ -1,0 +1,4 @@
+Source: ai/models/evaluation-v1.3.json
+Original test set: 393/397 correct; Accuracy = 98.99%
+New test set: 352/365 correct; Accuracy = 96.44%
+These are saved model evaluation results, not an end-to-end web system test.

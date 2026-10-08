@@ -37,5 +37,6 @@ export function formatThaiDateTime(iso: string): string {
   return new Intl.DateTimeFormat("th-TH", {
     dateStyle: "medium",
     timeStyle: "short",
+    timeZone: "Asia/Bangkok",
   }).format(new Date(iso));
 }

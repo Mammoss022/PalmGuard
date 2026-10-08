@@ -3,6 +3,7 @@
 export type UserRole = "farmer" | "admin";
 
 export interface AppUser {
+  hasSubmittedSurvey?: boolean;
   id: string;
   email: string;
   fullName: string;
@@ -41,6 +42,7 @@ export interface Diagnosis {
   id: string;
   imageUrl: string;
   status: DiagnosisStatus;
+  failureReason?: string | null;
   result: DiagnosisResult | null;
   createdAt: string;
 }

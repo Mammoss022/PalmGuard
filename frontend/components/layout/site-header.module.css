@@ -1,0 +1,15 @@
+.historyInner { max-width: 1600px; width: calc(100% - 48px); height: 74px; padding-left: 0; padding-right: 0; }
+.dashboardInner { max-width: 1290px; height: 62px; }
+.historyLogo { gap: 13px; color: #126347; }
+.logoMark { display: inline-flex; align-items: center; justify-content: center; width: 39px; height: 39px; border-radius: 16px 4px 16px 4px; color: white; background: #176c49; }
+.logoTitle { display: block; font-size: 24px; font-weight: 750; line-height: 1.1; }
+.logoSubtitle { display: block; margin-top: 4px; font-size: 11px; font-weight: 400; color: #509b7b; }
+.historyNav { gap: 8px; }
+.historyNav a { position: relative; padding: 12px 20px; gap: 10px; border-radius: 999px; color: #435d70; }
+.historyNav a[aria-current="page"] { background: #e7f6ec; color: #176b49; }
+.historyNav a[aria-current="page"]::after { content: ""; position: absolute; left: 12px; right: 12px; bottom: -7px; height: 3px; border-radius: 3px; background: #176b49; }
+.historyNav svg { width: 18px; height: 18px; }
+:global(.dark) .historyNav a { color: #c2d6ca; }
+:global(.dark) .historyNav a[aria-current="page"] { background: #23432f; color: #d4eddd; }
+@media (min-width: 1024px) { .historyInner { width: calc(100% - 128px); } }
+@media (max-width: 1023px) { .historyNav { gap: 2px; } .historyNav a { padding: 10px 12px; gap: 6px; } .logoTitle { font-size: 20px; } }

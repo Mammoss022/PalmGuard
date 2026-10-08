@@ -1,9 +1,9 @@
 import uuid
-from datetime import datetime
 
 from pydantic import BaseModel
 
 from app.models.diagnosis import Diagnosis
+from app.schemas.datetime import UtcDateTime
 
 
 class DiagnosisResult(BaseModel):
@@ -21,8 +21,9 @@ class DiagnosisResponse(BaseModel):
     id: uuid.UUID
     image_url: str
     status: str
+    failure_reason: str | None = None
     result: DiagnosisResult | None = None
-    created_at: datetime
+    created_at: UtcDateTime
 
     @classmethod
     def from_model(cls, diagnosis: Diagnosis) -> "DiagnosisResponse":
@@ -41,6 +42,7 @@ class DiagnosisResponse(BaseModel):
             id=diagnosis.id,
             image_url=diagnosis.image_url,
             status=diagnosis.status,
+            failure_reason=diagnosis.failure_reason if diagnosis.status == "failed" else None,
             result=result,
             created_at=diagnosis.created_at,
         )
