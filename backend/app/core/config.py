@@ -1,3 +1,4 @@
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -53,6 +54,7 @@ class Settings(BaseSettings):
     # same gate question correctly in ~1-2s.
     GEMINI_GATE_MODEL: str = "gemini-3.5-flash-lite"
     GEMINI_BASE_URL: str = "https://generativelanguage.googleapis.com/v1beta"
+    PALM_GATE_MIN_CONFIDENCE: float = Field(default=0.80, ge=0, le=1)
     MIN_CONFIDENCE_THRESHOLD: float = 0.55
 
     # Which inference backend app/services/inference.py dispatches to.

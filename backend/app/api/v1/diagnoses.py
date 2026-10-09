@@ -86,7 +86,7 @@ async def create_diagnosis(
         logger.warning("Diagnosis %s failed AI inference: %s", diagnosis.id, exc)
         message = str(exc)
         # Return photo-related guidance only; keep service details in the log.
-        safe_prefixes = ("โมเดลยังแยกโรค", "ความเชื่อมั่น", "ไม่พบใบปาล์มน้ำมัน", "ไฟล์ภาพไม่ถูกต้อง", "AI ไม่สามารถจำแนก")
+        safe_prefixes = ("โมเดลยังแยกโรค", "ความเชื่อมั่น", "ไม่พบใบปาล์มน้ำมัน", "ไม่สามารถยืนยันใบปาล์ม", "ไฟล์ภาพไม่ถูกต้อง", "AI ไม่สามารถจำแนก")
         reason = message if message.startswith(safe_prefixes) else "ระบบวิเคราะห์ภาพไม่พร้อมใช้งานชั่วคราว กรุณาลองใหม่อีกครั้ง"
         diagnosis = diagnosis_crud.mark_failed(db, diagnosis, reason=reason)
         return DiagnosisResponse.from_model(diagnosis)
