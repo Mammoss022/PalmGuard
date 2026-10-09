@@ -3,12 +3,11 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowLeft, BarChart3, ClipboardList, Leaf, ScanLine, ShieldCheck, Users } from "lucide-react";
+import { ArrowLeft, ClipboardList, Leaf, ScanLine, ShieldCheck, Users } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import styles from "./admin.module.css";
 
 const sections = [
-  { href: "/admin/dashboard", label: "ภาพรวมระบบ", title: "ภาพรวมระบบ", description: "ติดตามผู้ใช้งาน ผลวิเคราะห์ AI และแบบประเมินในที่เดียว", icon: BarChart3 },
   { href: "/admin", label: "ผู้ใช้งาน", title: "จัดการผู้ใช้งาน", description: "ดูข้อมูลบัญชี ประวัติการตรวจวิเคราะห์ และแบบประเมินของผู้ใช้", icon: Users },
   { href: "/admin/diagnoses", label: "ผลการตรวจวิเคราะห์", title: "จัดการผลการตรวจวิเคราะห์", description: "ค้นหา กรอง และตรวจสอบผลการวิเคราะห์ใบปาล์มในระบบ", icon: ScanLine },
   { href: "/admin/surveys", label: "แบบประเมิน", title: "ภาพรวมแบบประเมิน", description: "รับฟังความคิดเห็น เพื่อพัฒนาประสบการณ์การดูแลสวนปาล์ม", icon: ClipboardList },
@@ -21,7 +20,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   useEffect(() => { if (user.role !== "admin") router.replace("/dashboard"); }, [user.role, router]);
   if (user.role !== "admin") return null;
   const detail = pathname.startsWith("/admin/users/");
-  const section = sections.find(item => item.href === pathname) ?? sections[1];
+  const section = sections.find(item => item.href === pathname) ?? sections[0];
   const Icon = detail ? Users : section.icon;
   return <div className={styles.shell}>
     <div className={styles.backdrop} aria-hidden><Leaf /><Leaf /></div>

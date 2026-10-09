@@ -81,11 +81,6 @@ export function SiteHeader() {
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => router.push("/survey")}><ClipboardList /> แบบประเมิน</DropdownMenuItem>
             {currentUser.role === "admin" && (
-              <DropdownMenuItem onClick={() => router.push("/admin/dashboard")}>
-                <ShieldCheck /> Dashboard ผู้ดูแลระบบ
-              </DropdownMenuItem>
-            )}
-            {currentUser.role === "admin" && (
               <DropdownMenuItem onClick={() => router.push("/admin")}>
                 <ShieldCheck /> ผู้ดูแลระบบ
               </DropdownMenuItem>
