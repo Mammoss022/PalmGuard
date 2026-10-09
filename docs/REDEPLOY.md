@@ -4,27 +4,29 @@
 
 ## 1. ตั้ง Render ก่อน Push
 
-ใช้ service เดิมที่เชื่อม GitHub `Mammoss022/PalmGuard` กับ branch `main` และ Root Directory `backend`
+ใช้ service เดิมที่เชื่อม GitHub `Mammoss022/PalmGuard` กับ branch `main` และเว้น Root Directory ว่าง เพื่อให้เข้าถึงทั้ง `backend/` และ `ai/` ได้ Render ไม่ให้บริการเข้าถึงไฟล์นอก Root Directory ที่กำหนด ดังนั้นไม่ใช้ `backend` เป็น root สำหรับโมเดลที่อยู่อีกโฟลเดอร์
 
 ใช้ Pre-deploy Command หาก service รองรับ:
 
 ```bash
-alembic upgrade head
+cd backend && alembic upgrade head
 ```
 
 ถ้าไม่มี Pre-deploy Command ให้ใส่ migration ใน Build Command ของ service นี้:
 
 ```bash
-pip install -r requirements.txt && alembic upgrade head
+pip install -r backend/requirements.txt && cd backend && alembic upgrade head
 ```
 
 Start Command:
 
 ```bash
-uvicorn app.main:app --host 0.0.0.0 --port $PORT
+cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
 ```
 
 คำสั่งข้างต้นเป็น shell บน Render ค่า `$PORT` มาจาก Render ไม่ใช่ PowerShell ในเครื่อง
+
+ถ้าใช้ Pre-deploy Command ให้ Build Command เป็น `pip install -r backend/requirements.txt` และใช้ migration ใน Pre-deploy เพียงจุดเดียว
 
 ตรวจค่า Environment เดิมโดยไม่คัดลอก backend/.env ในเครื่องไปแทนทั้งหมด เพราะในเครื่องใช้ SQLite แต่ service จริงควรชี้ PostgreSQL เดิมของ Supabase:
 
@@ -96,3 +98,4 @@ https://YOUR_FRONTEND_DOMAIN
 - [Render Deploys](https://render.com/docs/deploys)
 - [Vercel Git Deployments](https://vercel.com/docs/git)
 - [Render Pre-deploy Command](https://render.com/docs/deploys#pre-deploy-command)
+- [Render Monorepo Root Directory](https://render.com/docs/monorepo-support)
